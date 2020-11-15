@@ -1,0 +1,9 @@
+#pragma once
+#include <glad/glad.h> 
+#include <gl/GL.h>
+#include <glfw3.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include "stb_image.h"
