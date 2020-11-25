@@ -6,4 +6,20 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <glm.hpp>
+#include <vec2.hpp>
+#include <vec3.hpp>
+#include <vec4.hpp>
+#include <mat4x4.hpp>
+#include <vec2.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
 #include "stb_image.h"
+
+#include "Shader.h"
+#include "Texture.h"
+#include "Material.h"
+#include "Vertex.h"
+#include "Mesh.h"
+#include "Primitives.h"
+#include "Scene.h"
