@@ -1,4 +1,0 @@
-﻿  Main.cpp
-C:\Users\Lenovo\Desktop\OpenGL\OpenGL_start\OpenGL_start\Source\Main.cpp(45,22): warning C4552: "-": результат выражения не используется
-C:\Users\Lenovo\Desktop\OpenGL\OpenGL_start\OpenGL_start\Source\Main.cpp(44,17): warning C4101: window: неиспользованная локальная переменная
-  OpenGL_start.vcxproj -> C:\Users\Lenovo\Desktop\OpenGL\OpenGL_start\x64\Debug\OpenGL_start.exe
