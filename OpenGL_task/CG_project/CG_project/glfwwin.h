@@ -38,6 +38,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             camera.keystate[2] = false;
         }
     }
+    if(key == GLFW_KEY_G){
+        if(action == GLFW_PRESS){
+            if(post_effect){
+                post_effect = false;
+            }else{
+                post_effect = true;
+            }
+        }
+    }
 }
 
 void mouse_callback(GLFWwindow* window, double x_pos, double y_pos){
