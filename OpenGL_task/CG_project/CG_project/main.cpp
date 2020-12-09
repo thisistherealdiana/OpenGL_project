@@ -60,7 +60,7 @@ camera.yaw   = -90.0f;
 camera.pitch = 0.0f;
 camera.last_x = 400;
 camera.last_y = 300;
-camera.camera_pos   = glm::vec3(3.0f, 0.0f,  3.0f);
+camera.camera_pos   = glm::vec3(3.2f, 1.0f,  3.0f);
 camera.camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
 camera.camera_up    = glm::vec3(0.0f, 1.0f,  0.0f);
 camera.first_mouse = true;
@@ -92,7 +92,13 @@ for(int i = 0; i < 4; i++){
     set_p_buffer(post_buffer, post_texture, camera.screen_width, camera.screen_height);
     GLuint post_vao =  set_p_vao();
     GLuint post_shad = comp_shader("./shaders/post_effect_v.c", "./shaders/post_effect_f.c");
+    
 
+    Material mymaterial;
+    mymaterial.shin = 0.2500f * 128.0f;
+    load_textures(mymaterial);
+    GLuint vao_for_plane = set_plane_vao1();
+    GLuint cubes_shad = comp_shader("./shaders/cubes_v.c", "./shaders/cubes_f.c");
 
     while(!glfwWindowShouldClose(window)){
         glfwPollEvents();
@@ -110,9 +116,15 @@ for(int i = 0; i < 4; i++){
         glm::mat4 view = glm::lookAt(camera.camera_pos, camera.camera_pos + camera.camera_front, camera.camera_up);
         glm::mat4 projection = glm::perspective(0.78539f, camera.screen_width / camera.screen_height, 0.1f, 100.0f);
         
-        my_drow_light(light_vao, light_shad, model, view, projection);
 
-        drow_mirrorcube( mirr_cube_vao, mirr_cube_shad,  glm::translate(glm::mat4(1.0f), glm::vec3(6.5f, 0.0f, 4.0f)),  view,  projection, camera.camera_pos,   tex_skybox);
+        glm::vec3 my_light_position = glm::vec3(2.0f, 1.3f, 5 + 5*glm::sin(2.2f*glfwGetTime()));
+        glm::mat4 model_l = glm::translate(glm::mat4(1.0f), my_light_position);
+        model_l = glm::scale(model_l, glm::vec3(0.35f));
+        my_drow_light(light_vao, light_shad, model_l, view, projection);
+
+        drow_mirrorcube(mirr_cube_vao, mirr_cube_shad,  glm::translate(glm::mat4(1.0f), glm::vec3(6.5f, 4.5f, 4.0f)),  view,  projection, camera.camera_pos, tex_skybox);
+
+        drow_plane1(cubes_shad, vao_for_plane,  mymaterial, camera.camera_pos,  my_light_position, model, view, projection);
 
         drow_skybox(vao_skybox,  sh_skybox, tex_skybox ,  model, view,  projection);
         drow_bilbords(  b_sh ,  b_vao,  b_texture,  view, projection,  camera.camera_pos );

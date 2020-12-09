@@ -155,8 +155,8 @@ int funccmp( const void * val1, const void * val2 );
 glm::vec3 local_camera_pos;
 int drow_bilbords( GLuint sh , GLuint vao, GLuint btexture, glm::mat4 view, glm::mat4 projection, glm::vec3 camera_pos ){
      glm::vec3 bilboard_position[] = {
-  glm::vec3(3.2f,  0.0f,  2.0f),   glm::vec3(3.9f,  0.0f,  3.0f),     glm::vec3(3.2f,  0.0f,  4.0f),    glm::vec3(3.9f,  0.0f,  5.0f),
-  glm::vec3(3.2f,  0.0f,  6.0f), glm::vec3(3.9f,  0.0f,  7.0f) };
+  glm::vec3(3.2f,  0.5f,  2.0f),   glm::vec3(3.9f,  0.5f,  3.0f),     glm::vec3(3.2f,  0.5f,  4.0f),    glm::vec3(3.9f,  0.5f,  5.0f),
+  glm::vec3(3.2f,  0.5f,  6.0f), glm::vec3(3.9f,  0.5f,  7.0f) };
     local_camera_pos = camera_pos;
     qsort(&bilboard_position, 6, sizeof(glm::vec3), funccmp);
     glUseProgram(sh);  
@@ -279,5 +279,109 @@ GLuint set_p_vao(){
     glDeleteBuffers(1, &VBO);
     return VAO;
 }
+
+
+
+GLfloat plane_vertices_main[] = {
+///////////////////////////////////////
+         10.0f, -0.0f,  10.0f, 0.0f, 0.1f, 0.0f,  5.0f, 0.0f,
+        -10.0f, -0.0f,  10.0f, 0.0f, 0.1f, 0.0f,  0.0f, 0.0f,//
+        -10.0f, -0.0f, -10.0f, 0.0f, 0.1f, 0.0f,  0.0f, 5.0f,
+         10.0f, -0.0f,  10.0f, 0.0f, 0.1f, 0.0f,  5.0f, 0.0f,//
+        -10.0f, -0.0f, -10.0f, 0.0f, 0.1f, 0.0f,  0.0f, 5.0f,
+         10.0f, -0.0f, -10.0f, 0.0f, 0.1f, 0.0f,  5.0f, 5.0f//
+        //         10.0f, -0.0f, -10.0f, 0.0f, 0.1f, 0.0f,  5.0f, 5.0f         10.0f, -0.0f, -10.0f, 0.0f, 0.1f, 0.0f,  5.0f, 5.0f
+    };
+GLuint set_plane_vao1(){
+    GLuint vbo, vao;
+    glGenBuffers(1, &vbo);
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(plane_vertices_main), plane_vertices_main, GL_STATIC_DRAW); 
+    glEnableVertexAttribArray(0); 
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
+    glEnableVertexAttribArray(1); 
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3*sizeof(GLfloat)));
+    glEnableVertexAttribArray(2); 
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6*sizeof(GLfloat)));
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    return vao;
+}
+
+class Material{
+public:
+    GLuint diffuse;
+    GLuint specular;
+    float shin;
+};
+
+
+int load_textures(Material &material){
+    int  tex_width, tex_height, n;
+    unsigned char * image;
+    GLuint new_texture;
+    glGenTextures(1, &new_texture);
+    glBindTexture(GL_TEXTURE_2D, new_texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
+    image = stbi_load("./textures/Tiles_05local/Tiles_05_basecolor.jpg", &tex_width, &tex_height, &n, 0);
+    if(image == NULL)
+    {
+        std::cout << "error open diffuse texture" << std::endl;
+        return 1;
+    }
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex_width, tex_height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    stbi_image_free(image);
+material.diffuse = new_texture;
+
+
+    glGenTextures(1, &new_texture);
+    glBindTexture(GL_TEXTURE_2D, new_texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
+    image = stbi_load("./textures/Tiles_05local/Tiles_05_glossiness.jpg", &tex_width, &tex_height, &n, 0);
+    if(image == NULL)
+    {
+        std::cout << "error open specular texture " << std::endl;
+        return  1;
+    }
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex_width, tex_height, 0,  GL_RGB, GL_UNSIGNED_BYTE, image);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    stbi_image_free(image);
+material.specular = new_texture;
+
+    return 0;
+}
+
+int drow_plane1(GLuint shad, GLuint vao, Material material_l, glm::vec3 camera_pos, glm::vec3 light_pos,  glm::mat4 model,  glm::mat4 view, glm::mat4 projection){
+        glUseProgram(shad);
+        glUniformMatrix4fv(glGetUniformLocation(shad, "model"), 1, GL_FALSE, glm::value_ptr(model));     
+        glUniformMatrix4fv(glGetUniformLocation(shad, "view"), 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(glGetUniformLocation(shad, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+        glUniform3fv(glGetUniformLocation(shad, "for_light.view_pos"), 1, glm::value_ptr(camera_pos));        
+        glUniform3fv(glGetUniformLocation(shad, "for_light.light_pos"), 1, glm::value_ptr(light_pos));   
+        glUniform1f(glGetUniformLocation(shad,"material.shin_par"), material_l.shin);//0.65f * 128.0f
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, material_l.diffuse);
+        glUniform1i(glGetUniformLocation(shad, "material.diffuse"), 0);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, material_l.specular);
+        glUniform1i(glGetUniformLocation(shad, "material.specular"), 1);
+
+        glBindVertexArray(vao); 
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glBindVertexArray(0); 
+        return 0;
+}
+
 
 #endif
