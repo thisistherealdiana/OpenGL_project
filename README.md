@@ -1,10 +1,11 @@
-﻿## В своей работе я реализовала:
+﻿## In this OpenGL project you can see:
 
-### 1) Попиксельный расчет освещенности(шейдер)
+### 1) Per-pixel Lightning (a shader)
 ### 2) Normal Mapping
-### 3) Parallax Mapping(на полу) - клавиша P
-### 4) Тест трафарета (реализовала обводку кубов)
-### 5) Тени на другие(все) объекты 
-### 6) Двумерный пост-эффект - клавиша G
-### 7) Полупрозрачные билборды, требующие упорядоченного вывода
-### 8) Кубические карты с одним зеркальным кубом
+### 3) Parallax Mapping (on the floor) — pressing the P key
+### 4) Stensil Testing (borders of the cubes)
+### 5) Shadow Mapping
+### 6) After Effect (green lens effect) — pressing the G key
+### 7) Translucent billboards that require orderly display
+### 8) Cubemaps (one mirror cube)
+### 9) Skybox
