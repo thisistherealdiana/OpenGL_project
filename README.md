@@ -9,3 +9,5 @@
 ### 7) Translucent billboards that require orderly display
 ### 8) Cubemaps (one mirror cube)
 ### 9) Skybox
+###
+### The results of the program can be seen on the screenshots in the folder Images.
