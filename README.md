@@ -11,10 +11,10 @@
 9. Skybox
 
 ### The results of the program can be seen on the screenshots in the folder Images or below
-![alt text](images/i1.png)
-![alt text](images/i2.png)
-![alt text](images/i3.png)
-![alt text](images/i4.png)
-![alt text](images/i5.png)
-![alt text](images/i6.png)
-![alt text](images/i7.png)
+![alt text](Images/i1.png)
+![alt text](Images/i2.png)
+![alt text](Images/i3.png)
+![alt text](Images/i4.png)
+![alt text](Images/i5.png)
+![alt text](Images/i6.png)
+![alt text](Images/i7.png)
